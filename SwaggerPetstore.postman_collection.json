@@ -315,7 +315,7 @@
 											"",
 											"pm.test(\"Correct Pet name is retrieved\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.name).to.eql(\"lucy\");",
+											"    pm.expect(jsonData.name).to.eql(\"photon\");",
 											"});",
 											"",
 											"pm.test(\"Correct Pet name is retrieved\", function () {",
@@ -372,7 +372,7 @@
 									"variable": [
 										{
 											"key": "petId",
-											"value": "1122334455"
+											"value": "111222"
 										}
 									]
 								}
@@ -2469,6 +2469,61 @@
 									"body": ""
 								}
 							]
+						},
+						{
+							"name": "Invalid username_password 400",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Invalid username and/or password supplied\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Status code should have Bad Request\", function () {",
+											"    pm.response.to.have.status(\"Bad Request\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/user/login?username=tuppu&password=bablutoto",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"login"
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "tuppu",
+											"description": "(Required) The user name for login"
+										},
+										{
+											"key": "password",
+											"value": "bablutoto",
+											"description": "(Required) The password for login in clear text"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -2562,6 +2617,18 @@
 				},
 				{
 					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2614,6 +2681,48 @@
 							"body": ""
 						}
 					]
+				},
+				{
+					"name": "Create user successful 200 OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"New user created successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 600ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"tuppu\",\n  \"firstName\": \"tuppu\",\n  \"lastName\": \"budlu\",\n  \"email\": \"tuppu.budlu@abc.com\",\n  \"password\": \"budlu\",\n  \"userStatus\": 0\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/user"
+					},
+					"response": []
 				}
 			]
 		}
